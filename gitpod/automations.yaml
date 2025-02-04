@@ -1,0 +1,16 @@
+version: 1.0
+automations:
+  - name: "初始化工作区"
+    init: |
+      # 安装 PHP 依赖
+      composer install --prefer-dist
+      # 如果有 .env.example 文件，则复制为 .env，否则输出提示信息
+      cp .env.example .env || echo "未找到 .env.example 文件"
+      # 如果是 Laravel 项目则生成应用密钥
+      php artisan key:generate || echo "可能不是 Laravel 项目"
+  - name: "启动开发服务器"
+    command: |
+      php artisan serve --host=0.0.0.0 --port=8000
+ports:
+  - port: 8000
+    onOpen: open-preview

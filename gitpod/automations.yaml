@@ -1,16 +1,21 @@
 version: 1.0
+# 指定加密配置文件（存放密钥或其他敏感信息）
+secrets:
+  file: encrypted-values.yaml
+
 automations:
   - name: "初始化工作区"
     init: |
-      # 安装 PHP 依赖
-      composer install --prefer-dist
-      # 如果有 .env.example 文件，则复制为 .env，否则输出提示信息
+      echo "开始安装依赖..."
+      composer install --prefer-dist || echo "安装 Composer 依赖失败"
+      # 如果存在 .env.example 则复制，否则提示信息
       cp .env.example .env || echo "未找到 .env.example 文件"
-      # 如果是 Laravel 项目则生成应用密钥
-      php artisan key:generate || echo "可能不是 Laravel 项目"
+      # 如果是 Laravel 项目，则生成应用密钥
+      php artisan key:generate || echo "当前项目可能不是 Laravel 项目"
   - name: "启动开发服务器"
     command: |
       php artisan serve --host=0.0.0.0 --port=8000
+
 ports:
   - port: 8000
     onOpen: open-preview

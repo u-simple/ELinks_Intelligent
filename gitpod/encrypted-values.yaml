@@ -1,0 +1,3 @@
+encrypted:
+  ENCRYPTION_KEY: "base64:AbCdEfGh1234567890"
+  API_SECRET: "base64:XyZ987MnOp456..."
